@@ -3,7 +3,7 @@
     { "source": "/", "destination": "/index.html" },
     { "source": "/app", "destination": "/app-test.html" },
     { "source": "/dashboard", "destination": "/app-test.html" },
-    { "source": "/signup", "destination": "/signup.html" }, 
+    { "source": "/signup", "destination": "/signup-test.html" }, 
     { "source": "/how-it-works", "destination": "/how-it-works.html" }, 
     { "source": "/reset", "destination": "/reset.html" }, 
     { "source": "/privacy", "destination": "/privacy.html" }, 
