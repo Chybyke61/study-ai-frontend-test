@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study.AI | Your Personal Academic Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; 
+            color: #f8fafc;
+            background-image: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%), 
+                              radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-500/30">
+
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i data-lucide="brain-circuit" class="text-emerald-400 w-8 h-8"></i>
+                <span class="text-2xl font-black font-['Plus_Jakarta_Sans'] tracking-tight text-white">Study.AI</span>
+            </div>
+            <a href="https://studyai-app.vercel.app" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full font-bold text-sm transition-all shadow-lg shadow-emerald-900/20 active:scale-95">
+                Launch App
+            </a>
+        </div>
+    </nav>
+
+    <header class="pt-40 pb-20 px-8 max-w-7xl mx-auto text-center relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-5xl md:text-7xl font-extrabold font-['Plus_Jakarta_Sans'] text-white mb-6 leading-tight tracking-tight">
+                Master Any <span class="text-emerald-400">Curriculum</span> <br>With AI Intelligence
+            </h1>
+            <p class="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
+                Upload your textbooks and lecture notes. Get instant summaries, structured notes, and practice quizzes tailored to your specific course content.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="https://studyai-app.vercel.app" class="group px-8 py-4 bg-white text-slate-950 rounded-2xl font-bold text-lg hover:bg-emerald-400 transition-all flex items-center gap-2">
+                    Start Studying Now
+                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-8 py-32">
+        <div class="glass-card rounded-[3rem] p-12 border border-slate-800/50">
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="flex flex-col items-center text-center relative">
+                    <div class="w-16 h-16 bg-slate-900 border border-slate-700 rounded-full flex items-center justify-center mb-6 text-2xl font-black text-emerald-400 shadow-inner">1</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Upload</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Drop your PDF or DOCX textbooks. We support files up to 50MB for comprehensive indexing.</p>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-emerald-500/30 to-transparent"></div>
+                </div>
+
+                <div class="flex flex-col items-center text-center relative">
+                    <div class="w-16 h-16 bg-slate-900 border border-slate-700 rounded-full flex items-center justify-center mb-6 text-2xl font-black text-emerald-400 shadow-inner">2</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Process</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Our AI indexes the content, reading and understanding your specific curriculum context.</p>
+                    <div class="hidden md:block absolute top-8 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-emerald-500/30 to-transparent"></div>
+                </div>
+
+                <div class="flex flex-col items-center text-center relative">
+                    <div class="w-16 h-16 bg-slate-900 border border-slate-700 rounded-full flex items-center justify-center mb-6 text-2xl font-black text-emerald-400 shadow-inner">3</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Learn</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Chat with your documents, extract core summaries, and generate instant practice quizzes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="max-w-7xl mx-auto px-8 pb-32">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4">
+                Upcoming Features
+            </div>
+            <h2 class="text-3xl md:text-5xl font-extrabold font-['Plus_Jakarta_Sans'] text-white mb-4">
+                🚀 Expanding <span class="text-emerald-400">Study.AI</span>
+            </h2>
+            <p class="text-slate-400 font-medium max-w-2xl mx-auto">
+                We are building the future of academic intelligence with these powerful new tools.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-emerald-500/30 transition-all group shadow-xl">
+                <div class="w-12 h-12 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="presentation" class="text-emerald-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">PPTX Support</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Extract structured knowledge and visual context from your PowerPoint lecture slides instantly.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-blue-500/30 transition-all group shadow-xl">
+                <div class="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="scan-text" class="text-blue-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">Intelligent OCR</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Turn images, scanned PDFs, and handwritten notes into interactive digital study materials.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-indigo-500/30 transition-all group shadow-xl">
+                <div class="w-12 h-12 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="zap" class="text-indigo-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">Smart Summaries</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Condense massive chapters into high-fidelity notes without losing critical academic details.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-emerald-500/30 transition-all group shadow-xl border-dashed">
+                <div class="w-12 h-12 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="layers" class="text-emerald-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">Flashcards AI</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Automated spaced-repetition cards generated directly from your documents for better recall.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-blue-500/30 transition-all group shadow-xl border-dashed">
+                <div class="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="library" class="text-blue-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">Multi-Doc Analysis</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Connect multiple sources to compare theories and extract insights across your entire library.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2rem] hover:border-indigo-500/30 transition-all group shadow-xl border-dashed">
+                <div class="w-12 h-12 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="calendar" class="text-indigo-400 w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 font-['Plus_Jakarta_Sans'] text-white">AI Study Planner</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Dynamic schedules that adapt to your progress and exam dates to keep you on track.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="brain-circuit" class="text-emerald-400 w-5 h-5"></i>
+                <span class="font-bold font-['Plus_Jakarta_Sans'] text-white">Study.AI</span>
+            </div>
+            <div class="text-slate-500 text-sm font-medium">
+                © 2026 Study.AI. Built for students, powered by AI.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

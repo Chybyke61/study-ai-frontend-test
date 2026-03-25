@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | Study.AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%); background-attachment: fixed; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .legal-content h3 { color: #3b82f6; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.25rem; }
+        .legal-content p, .legal-content li { color: #94a3b8; line-height: 1.7; margin-bottom: 1rem; }
+        .legal-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+        .text-link { color: #3b82f6; text-decoration: underline; text-underline-offset: 4px; }
+    </style>
+</head>
+<body class="antialiased">
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2">
+                <i data-lucide="brain-circuit" class="text-blue-400 w-8 h-8"></i>
+                <span class="text-2xl font-black font-['Plus_Jakarta_Sans'] tracking-tight text-white">Study.AI</span>
+            </a>
+            <a href="/" class="text-slate-400 hover:text-white text-sm font-medium transition-colors">Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="pt-40 pb-20 px-8 max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold font-['Plus_Jakarta_Sans'] text-white mb-4">Privacy Policy</h1>
+            <p class="text-slate-500 font-medium">Last Updated: March 2026</p>
+        </div>
+
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl legal-content">
+            <p>This Policy explains how Study.AI collects and uses your data. Your use of the service is also subject to our <a href="/terms" class="text-link">Terms of Use</a>.</p>
+
+            <h3>1. Data Collection</h3>
+            <p>We collect account identifiers (email) and content you upload (PDFs/Slides) to provide AI-powered insights. We do not sell this data to third parties.</p>
+
+            <h3>2. Cookies & Tracking</h3>
+            <p>Study.AI uses essential cookies and local storage to keep you logged in and remember your session preferences. We may use minimal telemetry to track platform performance and error logs to ensure stability across different hardware specifications.</p>
+
+            <h3>3. AI Processing</h3>
+            <p>Documents are processed via secure APIs. Text chunks are temporarily handled to generate summaries and quizzes. We utilize infrastructure provided by Supabase and Cloudflare to ensure data isolation.</p>
+
+            <h3>4. Your Rights</h3>
+            <p>You may delete your data at any time via your dashboard. Deleting a document or account removes all associated text indices from our active storage immediately.</p>
+        </div>
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
+

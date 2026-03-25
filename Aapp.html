@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study.AI | Premium Learning Copilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        :root { --brand-primary: #6366f1; }
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; 
+            color: #f8fafc;
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+        
+        /* Markdown Styling */
+        .markdown-content h1, .markdown-content h2 { 
+            color: #818cf8;
+            font-family: 'Plus Jakarta Sans'; 
+            margin-top: 1.5rem; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 0.5rem; 
+            font-weight: 700;
+        }
+        .markdown-content p { margin-bottom: 1rem; line-height: 1.8; color: #cbd5e1; }
+        .markdown-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #cbd5e1; }
+        .markdown-content code { background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 6px; font-size: 0.9em; color: #f472b6; }
+    </style>
+
+   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body class="min-h-screen">
+
+    <div id="loadingScreen" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#020617] bg-[radial-gradient(at_0%_0%,rgba(99,102,241,0.15)_0%,transparent_50%),radial-gradient(at_100%_100%,rgba(16,185,129,0.1)_0%,transparent_50%)] backdrop-blur-sm transition-opacity duration-500">
+    
+    <div class="flex flex-col items-center">
+        <div class="relative flex items-center justify-center w-24 h-24 mb-6">
+            <svg class="absolute inset-0 w-full h-full text-indigo-600/30 animate-[spin_3s_linear_infinite]" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            
+            <div class="absolute inset-2 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl shadow-[0_0_30px_rgba(79,70,229,0.3)] flex items-center justify-center backdrop-blur-md">
+                <i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-400 animate-pulse"></i>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-extrabold tracking-tight text-white mb-4 font-['Plus_Jakarta_Sans']">Study.AI</h2>
+        
+        <div class="flex items-center gap-2 mb-4">
+            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 0s;"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 0.15s;"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 0.3s;"></div>
+        </div>
+        
+        <p class="text-[10px] font-bold text-indigo-400/80 uppercase tracking-[0.2em] animate-pulse">Initializing Workspace...</p>
+    </div>
+</div>
+
+
+    <div id="loginScreen" class="hidden min-h-screen flex items-center justify-center p-4">
+        <div class="glass-card rounded-[2.5rem] p-8 sm:p-10 w-full max-w-md shadow-2xl">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-6 shadow-xl shadow-indigo-500/20">
+                    <i data-lucide="graduation-cap" class="text-white w-8 h-8"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold tracking-tight text-white mb-2 font-['Plus_Jakarta_Sans']">Welcome Back</h2>
+                <p class="text-slate-400 text-sm font-medium">Elevate your study session with AI</p>
+            </div>
+
+            <div class="space-y-4">
+                <input id="email" type="email" placeholder="Email address" class="w-full px-5 py-4 rounded-2xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all">
+                <div class="relative">
+    <input 
+        id="password" 
+        type="password" 
+        placeholder="Password"
+        class="w-full px-5 py-4 rounded-2xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+    >
+
+    <!-- 👁 Toggle -->
+    <button 
+        type="button" 
+        onclick="togglePassword('password', this)" 
+        class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+    >
+        <i data-lucide="eye"></i>
+    </button>
+                </div>
+                <p 
+    onclick="forgotPassword()" 
+    class="text-right text-xs text-indigo-400 cursor-pointer hover:underline"
+>
+    Forgot Password?
+                </p>
+                
+                <div class="mt-6 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50 flex flex-col items-center justify-center backdrop-blur-sm">
+    <div class="flex items-center gap-2 mb-3 self-start ml-1">
+        <i data-lucide="shield-check" class="w-3 h-3 text-emerald-500"></i>
+        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
+            Security Verification
+        </label>
+    </div>
+
+    <div 
+        class="cf-turnstile" 
+        data-sitekey="0x4AAAAAACuLeZ39cRRtBKwI" 
+        data-theme="dark"
+        data-appearance="always"
+        data-compact="false">
+    </div>
+</div>
+
+                <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">Sign In</button>
+                <div class="flex items-center my-6">
+                  <div class="flex-1 border-t border-slate-800"></div>
+                  <span class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">or</span>
+                  <div class="flex-1 border-t border-slate-800"></div>
+               </div>
+
+                <button onclick="googleLogin()" 
+    class="w-full flex items-center justify-center bg-slate-900/50 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 gap-3 group">
+    
+    <div class="bg-white p-1.5 rounded-xl group-hover:scale-110 transition-transform">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4">
+    </div>
+    
+    <span class="tracking-tight">Continue with Google</span>
+</button>
+
+
+              <a href="/signup" class="w-full flex items-center justify-center bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 gap-2">
+                  <i data-lucide="user-plus" class="w-4 h-4 text-indigo-400"></i>
+                  Create New Account
+                  </a>
+                
+            </div>
+        </div>
+     </div>
+
+    <div id="appContainer" class="hidden min-h-screen flex flex-col">
+        <nav class="border-b border-white/5 bg-slate-950/50 backdrop-blur-md px-4 sm:px-6 h-20 flex justify-between items-center sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2 rounded-xl"><i data-lucide="zap" class="text-white w-5 h-5"></i></div>
+                <h1 class="text-lg sm:text-xl font-extrabold tracking-tight font-['Plus_Jakarta_Sans'] uppercase tracking-wider">Study.AI <span class="text-indigo-500 text-xs hidden sm:inline">PRO</span></h1>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-4">
+                <button onclick="testEmail()" 
+class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl">
+    Test Email
+                </button>
+
+                <input id="emailInput" placeholder="Enter email" class="border p-2 text-black">
+<button onclick="sendOTP()" class="bg-blue-600 text-white px-3 py-2">Send OTP</button>
+
+<input id="otpInput" placeholder="Enter OTP" class="border p-2 text-black mt-2">
+<button onclick="verifyOTP()" class="bg-green-600 text-white px-3 py-2">Verify OTP</button>
+                
+                <button onclick="loadBooks()" class="p-2 sm:p-2.5 rounded-xl glass-card hover:bg-white/5 transition-all text-slate-400" title="Sync Library">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+                <button onclick="logout()" class="px-4 sm:px-5 py-2 sm:py-2.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white text-xs font-bold rounded-xl transition-all">
+                    LOGOUT
+                </button>
+            </div>
+        </nav>
+
+        <div class="flex-1 flex flex-col lg:flex-row max-w-[1600px] mx-auto w-full p-4 lg:p-8 gap-6 lg:gap-8 overflow-hidden">
+             
+            <aside class="w-full lg:w-80 xl:w-96 flex flex-col gap-6 flex-shrink-0 lg:h-[calc(100vh-8rem)]">
+                
+                <div class="glass-card rounded-[2rem] p-6 shrink-0 shadow-lg">
+                    <h3 class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                         <i data-lucide="upload-cloud" class="w-3 h-3"></i> Ingest Material
+                    </h3>
+                    <input type="file" id="bookFile" class="hidden" accept=".pdf,.doc,.docx" onchange="updateFileName()">
+                    <label for="bookFile" class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-700 rounded-3xl cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all group">
+                        <i data-lucide="plus-circle" class="w-6 h-6 text-slate-500 group-hover:text-indigo-400 mb-2 transition-colors"></i>
+                        <span id="fileNameDisplay" class="text-xs text-slate-400 px-4 text-center font-medium">Select PDF or DOCX only</span>
+                    </label>
+                    <button onclick="uploadBook()" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all active:scale-95 flex justify-center items-center gap-2">
+                        <i data-lucide="database-zap" class="w-4 h-4"></i> Index Knowledge
+                    </button>
+                    
+                    <div id="progWrapper" class="hidden mt-4 bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                        <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wider">
+                            <span id="progText">Initializing... 0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div id="progBar" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="glass-card rounded-[2rem] p-6 flex-1 flex flex-col overflow-hidden shadow-lg min-h-[250px]">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Your Library (<span id="bookCount" class="text-indigo-400">0</span>)</h3>
+                        <i data-lucide="library" class="w-4 h-4 text-slate-600"></i>
+                    </div>
+                    <div id="books" class="flex-1 overflow-y-auto custom-scrollbar space-y-2.5 pr-2"></div>
+                </div>
+            </aside>
+
+            <main class="flex-1 flex flex-col gap-6 overflow-hidden min-h-[500px]">
+                
+                <div class="glass-card rounded-[2rem] p-5 sm:p-6 lg:p-8 shadow-lg shrink-0">
+                    <div class="relative w-full mb-5 group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-indigo-400 group-focus-within:text-indigo-300 transition-colors"></i>
+                        </div>
+                        <input id="topic" type="text" placeholder="What should the AI analyze or explain today?" class="w-full bg-slate-900/60 border border-slate-700/80 rounded-2xl py-4 sm:py-5 pl-14 pr-6 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-inner text-sm sm:text-base">
+                    </div>
+
+                    <div class="flex flex-col xl:flex-row gap-4">
+                        <div class="flex gap-3 sm:gap-4 flex-1">
+                            <select id="level" class="bg-slate-900/60 border border-slate-700/80 rounded-2xl px-4 sm:px-6 py-3.5 text-xs sm:text-sm font-semibold appearance-none cursor-pointer flex-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/30">
+                                <option value="University">University</option>
+                                <option value="Secondary">Secondary</option>
+                                <option value="Primary">Primary</option>
+                            </select>
+                            <select id="bookSelector" class="bg-slate-900/60 border border-slate-700/80 rounded-2xl px-4 sm:px-6 py-3.5 text-xs sm:text-sm font-semibold appearance-none cursor-pointer flex-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 truncate">
+                                <option value="all">All Library Files</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex gap-2 sm:gap-3 flex-wrap xl:flex-nowrap">
+                            <button onclick="requestAI('explain')" class="flex-1 xl:flex-none min-w-[120px] bg-indigo-600 hover:bg-indigo-500 text-white py-3.5 px-4 rounded-2xl transition-all font-bold text-sm flex items-center justify-center gap-2 group shadow-md">
+                                <i data-lucide="book-open" class="w-4 h-4 group-hover:scale-110 transition-transform"></i> Explain
+                            </button>
+                            <button onclick="requestAI('quiz')" class="flex-1 xl:flex-none min-w-[120px] bg-emerald-600 hover:bg-emerald-500 text-white py-3.5 px-4 rounded-2xl transition-all font-bold text-sm flex items-center justify-center gap-2 group shadow-md">
+                                <i data-lucide="help-circle" class="w-4 h-4 group-hover:scale-110 transition-transform"></i> Quiz
+                            </button>
+                            <button onclick="requestAI('notes')" class="flex-1 xl:flex-none min-w-[120px] bg-amber-600 hover:bg-amber-500 text-white py-3.5 px-4 rounded-2xl transition-all font-bold text-sm flex items-center justify-center gap-2 group shadow-md">
+                                <i data-lucide="file-text" class="w-4 h-4 group-hover:scale-110 transition-transform"></i> Notes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-[2rem] flex-1 overflow-hidden flex flex-col shadow-2xl relative">
+                    <div id="result" class="flex-1 p-6 sm:p-8 lg:p-12 overflow-y-auto custom-scrollbar markdown-content text-slate-300">
+                        <div class="h-full flex flex-col items-center justify-center opacity-30 text-center">
+                            <div class="bg-slate-800 p-4 rounded-full mb-4">
+                                <i data-lucide="brain-circuit" class="w-10 h-10 text-indigo-400"></i>
+                             </div>
+                            <h4 class="text-xl font-bold font-['Plus_Jakarta_Sans'] text-white">Neural Engine Ready</h4>
+                            <p class="max-w-sm mt-3 text-sm leading-relaxed">Select a document from your library, type a concept above, and let the AI generate deep explanations, notes, or quizzes.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 transition-all duration-300 z-[100] font-bold text-sm pointer-events-none border border-slate-600 flex items-center gap-2"></div>
+
+    <script>
+        const api = "https://study-ai-tq7i.onrender.com";
+        const supabaseUrl = "https://hffbjtbahfwudigywzzx.supabase.co";
+        const supabaseKey = "sb_publishable_HLf2YIFAJsl7V7MKzqw0HA_Ud0lmej5";
+
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (session?.user) {
+        checkUser(); // re-run when session is ready
+    }
+});
+        let currentUser = null;
+        let allBooks = [];
+        const sessionId = localStorage.getItem("studyai_session") || crypto.randomUUID();
+        localStorage.setItem("studyai_session", sessionId);
+
+        lucide.createIcons();
+
+        // 🚫 Prevent auto-login after email verification
+/*async function handleEmailRedirect() {
+    const hash = window.location.hash;
+
+    if (hash && hash.includes("access_token")) {
+        // Supabase auto login happened
+        await supabaseClient.auth.signOut();
+
+        // Clean redirect (no token in URL)
+        window.location.replace("/?verified=1");
+    }
+}*/
+        async function handleEmailRedirect() {
+    const hash = window.location.hash;
+    const isGoogle = hash.includes("provider_token");
+
+    if (!hash || !hash.includes("access_token")) return;
+
+    const { data } = await supabaseClient.auth.getSession();
+
+    const provider = data?.session?.user?.app_metadata?.provider;
+
+    if (isGoogle) {
+        window.location.replace("/dashboard");
+    } else {
+        await supabaseClient.auth.signOut();
+        window.location.replace("/?verified=1");
+    }
+        }
+
+        // --- AUTH ---
+    async function checkUser() {
+        const loader = document.getElementById("loadingScreen");
+loader.style.opacity = "1";
+loader.style.display = "flex";
+    //const { data } = await supabaseClient.auth.getUser();
+    const { data: { session } } = await supabaseClient.auth.getSession();
+const user = session?.user;
+    const path = window.location.pathname;
+
+    // ✅ If user is logged in
+    if (user) {
+
+        // 🔥 FORCE redirect if on homepage
+if (!window.location.pathname.startsWith("/dashboard")) {
+    window.location.href = "/dashboard";
+    return;
+}
+
+        // block unverified users
+       // if (!data.user.email_confirmed_at && data.user.app_metadata.provider !== "google") {
+        if (!user.email_confirmed_at && user.app_metadata.provider !== "google") {
+            await supabaseClient.auth.signOut();
+
+            showToast("📩 Verify your email first");
+            document.getElementById("loginScreen").classList.remove("hidden");
+            document.getElementById("appContainer").classList.add("hidden");
+
+            hideLoader(); // ✅ ADD THIS
+            return;
+        }
+
+        currentUser = user;
+
+        // 👉 Allow dashboard
+        
+        if (path.startsWith("/dashboard")) {
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("appContainer").classList.remove("hidden");
+    loadBooks();
+
+    // ✅ ADD THIS LINE
+    hideLoader();
+        }
+        
+         else {
+            // 👉 redirect logged-in users to dashboard
+            window.location.href = "/dashboard";
+        }
+
+    } else {
+        // ❌ NOT LOGGED IN
+
+        // 👉 BLOCK dashboard access
+        if (path.startsWith("/dashboard")) {
+            window.location.href = "/";
+            return;
+        }
+
+        // 👉 show login normally
+        document.getElementById("loginScreen").classList.remove("hidden");
+        document.getElementById("appContainer").classList.add("hidden");
+
+        // ✅ ADD THIS
+         hideLoader();
+    }
+    }
+
+        async function login() {
+
+            // ✅ Anti-spam (rate limit)
+const key = "loginAttempt";
+const lastAttempt = localStorage.getItem(key);
+const now = Date.now();
+
+if (lastAttempt && now - lastAttempt < 3000) {
+    showToast("⏳ Please wait a moment...");
+    return;
+}
+            
+        const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+
+    if (!token) {
+    return showToast("⚠️ Please verify you're human", true);
+    }
+    localStorage.setItem(key, now);
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        showToast(`⚠️ ${error.message}`);
+
+        if (window.turnstile) {
+    turnstile.reset();
+        }
+        return;
+    }
+
+    // ✅ NEW: Check if email is verified
+    if (!data.user.email_confirmed_at) {
+    showToast("📩 Verify your email first");
+
+        if (window.turnstile) {
+    turnstile.reset();
+        }
+
+    // ✅ ADD THIS
+    return;
+    }
+
+    showToast("✅ Authenticated Successfully");
+
+// redirect to dashboard
+window.location.href = "/dashboard";
+        } 
+
+        async function googleLogin() {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+            redirectTo: window.location.origin + "/app"
+        }
+    });
+
+    if (error) {
+        showToast("❌ Google login failed");
+    }
+        }
+
+        async function logout() {
+    await supabaseClient.auth.signOut();
+
+    // Reset UI immediately
+    currentUser = null;
+
+    document.getElementById("appContainer").classList.add("hidden");
+    document.getElementById("loginScreen").classList.remove("hidden");
+
+    showToast("👋 Logged out successfully");
+        }
+
+        // --- LIBRARY ---
+        async function loadBooks() {
+            try {
+                const res = await fetch(`${api}/books`, {
+                    headers: { "x-user-id": currentUser.id }
+                });
+                allBooks = await res.json();
+                renderBooks();
+            } catch (err) { console.error("Error loading books:", err); }
+        }
+
+        function renderBooks() {
+            const container = document.getElementById("books");
+            const selector = document.getElementById("bookSelector");
+            
+            container.innerHTML = "";
+            selector.innerHTML = '<option value="all">All Library Files</option>';
+            document.getElementById("bookCount").innerText = allBooks.length;
+
+            if (allBooks.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center mt-4">No documents indexed yet.</p>`;
+                return;
+            }
+
+            allBooks.forEach(book => {
+                const fileNameSafe = book.filename || book.name; 
+                if (!fileNameSafe) return; 
+                
+                const displayName = fileNameSafe.split('_').slice(1).join('_') || fileNameSafe;
+  
+                // Sidebar Item
+                const div = document.createElement("div");
+                div.className = "group bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-2xl flex items-center justify-between transition-all hover:border-indigo-500/50 hover:bg-slate-800/80";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="bg-indigo-500/10 p-1.5 rounded-lg text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors shrink-0">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-xs truncate text-slate-300 font-medium">${displayName}</span>
+                    </div>
+                    <button onclick="deleteBook('${fileNameSafe}')" class="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors shrink-0" title="Delete file">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+
+                // Populate Dropdown Selector
+                const opt = document.createElement("option");
+                opt.value = fileNameSafe;
+                opt.innerText = displayName;
+                selector.appendChild(opt);
+            });
+
+            // ✅ Auto-select last opened book
+const savedBook = localStorage.getItem("selectedBook");
+
+if (savedBook) {
+    selector.value = savedBook;
+}
+     
+            lucide.createIcons();
+        }
+
+        // --- REAL PROGRESS UPLOAD REWRITE ---
+    /*    async function uploadBook() {
+            
+            // 🔥 ALWAYS refresh user (fixes null issue permanently)
+const { data } = await supabaseClient.auth.getUser();
+currentUser = data.user;
+
+// Debug log
+console.log("USER:", currentUser);
+
+if (!currentUser || !currentUser.id) {
+    showToast("⚠️ Please login first");
+    return;
+}
+            const fileInput = document.getElementById("bookFile");
+            if (!fileInput.files[0]) return showToast("⚠️ Select a file first.");
+
+            const file = fileInput.files[0];
+            const progWrapper = document.getElementById("progWrapper");
+            const progBar = document.getElementById("progBar");
+            const progText = document.getElementById("progText");
+            let eventSource = null;
+
+            try {
+                // Reset Progress UI
+                progWrapper.classList.remove('hidden');
+                progBar.style.width = '0%';
+                progText.innerText = 'Requesting secure link... 0%';
+                progBar.className = 'bg-indigo-500 h-full transition-all duration-300';
+                progText.className = 'text-[10px] font-bold text-indigo-400 mb-2 uppercase tracking-wider';
+
+                // STEP 1: Request signed upload URL
+                const signedRes = await fetch(`${api}/generate-upload-url`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-user-id": currentUser.id
+                    },
+                    body: JSON.stringify({ filename: file.name })
+                });
+                
+                const data = await signedRes.json();
+                if (!signedRes.ok) throw new Error(data.error || "Failed to get upload URL");
+                const { uploadUrl, fileKey } = data;
+
+                // STEP 2: Upload directly to Cloudflare R2 using fetch
+                progText.innerText = 'Uploading to Cloud... 5%';
+                progBar.style.width = '5%';
+                
+                const uploadRes = await fetch(uploadUrl, {
+                    method: "PUT",
+                    headers: { "Content-Type": file.type || "application/octet-stream" },
+                    body: file
+                });
+
+                if (!uploadRes.ok) throw new Error("Cloud upload failed");
+
+                // STEP 3: Connect to Server-Sent Events for real-time indexing progress
+                progText.innerText = 'Starting Indexing... 10%';
+                progBar.style.width = '10%';
+                
+                /*eventSource = new EventSource(`${api}/progress`);
+                
+                eventSource.onmessage = (event) => {
+                    try {
+                        const evtData = JSON.parse(event.data);
+                        if (evtData.step && evtData.progress !== undefined) {
+                            // Update UI from backend emission
+                            progText.innerText = `${evtData.step} ${evtData.progress}%`;
+                            progBar.style.width = `${evtData.progress}%`;
+                            
+                            // Check for completion
+                            if (evtData.progress >= 100 || evtData.step.includes("Completed")) {
+                                eventSource.close();
+                                progBar.classList.replace('bg-indigo-500', 'bg-emerald-500');
+                                progText.innerText = '✅ Success! Indexed.';
+                                progText.classList.replace('text-indigo-400', 'text-emerald-400');
+                                showToast("✅ Document ready for AI analysis");
+                                loadBooks();
+                                fileInput.value = "";
+                                document.getElementById('fileNameDisplay').innerText = "Select PDF, Image or Doc";
+                                
+                                setTimeout(() => progWrapper.classList.add('hidden'), 3500);
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Error parsing progress data", e);
+                    }
+                };
+
+                eventSource.onerror = () => {
+                    console.error("Lost connection to progress stream.");
+                    eventSource.close();
+                };
+
+                // STEP 4: Start indexing FIRST
+                const indexPromise = fetch(`${api}/upload`, {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json", 
+                        "x-user-id": currentUser.id 
+                    },
+                    body: JSON.stringify({ fileKey, filename: file.name })
+                });
+
+                // THEN connect to progress stream
+                function connectSSE() {
+    eventSource = new EventSource(`${api}/progress?userId=${currentUser.id}`);
+
+    eventSource.onmessage = (event) => {
+        const evtData = JSON.parse(event.data);
+
+        if (evtData.step && evtData.progress !== undefined) {
+            progText.innerText = `${evtData.step} ${evtData.progress}%`;
+            progBar.style.width = `${evtData.progress}%`;
+
+            if (evtData.progress >= 100) {
+                eventSource.close();
+
+                progBar.classList.replace('bg-indigo-500', 'bg-emerald-500');
+                progText.innerText = '✅ Success! Indexed.';
+                progText.classList.replace('text-indigo-400', 'text-emerald-400');
+
+                showToast("✅ Document ready");
+                loadBooks();
+
+                setTimeout(() => {
+                    progWrapper.classList.add('hidden');
+                }, 3000);
+            }
+        }
+    };
+
+    eventSource.onerror = () => {
+        console.log("Reconnecting SSE...");
+        eventSource.close();
+
+        setTimeout(() => {
+            connectSSE(); // 🔥 important
+        }, 2000);
+    };
+}
+
+// Start it
+connectSSE();
+
+                // wait for backend to finish
+                const indexRes = await indexPromise;
+
+                const indexData = await indexRes.json();
+                if (!indexRes.ok) {
+                    if (eventSource) {
+                        eventSource.close();
+                    }
+                    throw new Error(indexData.error || "Indexing failed");
+                }
+
+            } catch (err) {
+                if (eventSource) eventSource.close();
+                console.error(err);
+                progBar.style.width = '100%';
+                progBar.classList.replace('bg-indigo-500', 'bg-red-500');
+                progText.innerText = '❌ Upload Failed.';
+                progText.classList.replace('text-indigo-400', 'text-red-400');
+                showToast(`❌ ${err.message || "Failed to process document."}`);
+                setTimeout(() => progWrapper.classList.add('hidden'), 4000);
+            }
+        }*/
+
+        async function uploadBook() {
+
+    if (!currentUser || !currentUser.id) {
+        showToast("⚠️ Please login first");
+        return;
+    }
+    const fileInput = document.getElementById("bookFile");
+    if (!fileInput.files[0]) return showToast("⚠️ Select a file first.");
+
+    const file = fileInput.files[0];
+            
+    // 🔒 Frontend file type enforcement
+    const allowedTypes = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/msword"
+    ];
+
+//if (!allowedTypes.includes(file.type)) {
+     const fileName = file.name.toLowerCase();
+
+if (
+    !allowedTypes.includes(file.type) &&
+    !fileName.endsWith(".pdf") &&
+    !fileName.endsWith(".doc") &&
+    !fileName.endsWith(".docx")
+) {
+    
+    showToast("❌ Only PDF and DOCX allowed");
+    fileInput.value = ""; // reset input
+    document.getElementById("fileNameDisplay").innerText = "Select PDF or DOCX only";
+    return;
+}
+    const progWrapper = document.getElementById("progWrapper");
+    const progBar = document.getElementById("progBar");
+    const progText = document.getElementById("progText");
+
+    let eventSource;
+
+    try {
+        // Show progress UI
+        progWrapper.classList.remove('hidden');
+        progBar.style.width = '0%';
+        progText.innerText = 'Uploading... 0%';
+
+        // 🔥 CONNECT SSE FIRST
+        function connectSSE() {
+            eventSource = new EventSource(`${api}/progress?userId=${currentUser.id}`);
+
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                progText.innerText = `${data.step} ${data.progress}%`;
+                progBar.style.width = `${data.progress}%`;
+
+                if (data.progress >= 100) {
+                    eventSource.close();
+
+                    progText.innerText = "✅ Completed";
+                    progBar.classList.replace("bg-indigo-500", "bg-emerald-500");
+
+                    showToast("✅ Upload complete");
+                    loadBooks();
+
+                    setTimeout(() => {
+                        progWrapper.classList.add("hidden");
+                    }, 3000);
+                }
+            };
+
+            eventSource.onerror = () => {
+                console.log("Reconnecting SSE...");
+                eventSource.close();
+                setTimeout(connectSSE, 2000);
+            };
+        }
+
+        connectSSE();
+
+        // 🔥 SEND FILE TO BACKEND
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch(`${api}/upload-stream`, {
+            method: "POST",
+            headers: {
+                "x-user-id": currentUser.id
+            },
+            body: formData
+        });
+
+        if (!res.ok) throw new Error("Upload failed");
+
+    } catch (err) {
+        if (eventSource) eventSource.close();
+
+        progText.innerText = "❌ Failed";
+        progBar.classList.replace("bg-indigo-500", "bg-red-500");
+
+        showToast("❌ Upload failed");
+    }
+        }
+
+        async function deleteBook(name) {
+    if (!currentUser || !currentUser.id) {
+        showToast("⚠️ Please login");
+        return;
+    }
+
+    if (!confirm("Delete this document?")) return;
+
+    try {
+        showToast("Deleting...");
+
+        const res = await fetch(`${api}/delete-book/${encodeURIComponent(name)}`, {
+            method: "DELETE",
+            headers: { "x-user-id": currentUser.id }
+        });
+
+        if (!res.ok) throw new Error();
+
+        showToast("🗑️ Deleted successfully");
+        loadBooks();
+
+    } catch (e) {
+        showToast("❌ Delete failed");
+    }
+        }
+
+        // --- AI ---
+        async function requestAI(type) {
+    const topic = document.getElementById("topic").value;
+    const resultBox = document.getElementById("result");
+
+    if (!topic) {
+        document.getElementById("topic").focus();
+        return showToast("⚠️ Enter a topic to analyze.");
+    }
+
+    resultBox.innerHTML = `
+    <div class="flex flex-col items-center justify-center h-full text-indigo-400">
+        <i data-lucide="loader-2" class="w-12 h-12 mb-4 animate-spin"></i>
+        <p class="font-bold tracking-widest text-xs animate-pulse">
+            AI IS REASONING OVER YOUR DATA...
+        </p>
+    </div>`;
+    lucide.createIcons();
+
+    try {
+        const endpoint = type === 'explain' ? 'deep-explain' : type;
+
+        const res = await fetch(`${api}/${endpoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-user-id": currentUser.id
+            },
+            body: JSON.stringify({
+                topic,
+                level: document.getElementById("level").value,
+                book: document.getElementById("bookSelector").value,
+                sessionId
+            })
+        });
+
+        const data = await res.json();
+        const raw = data.explanation || data.quiz || data.notes;
+
+        if (!raw) throw new Error("Empty response");
+
+        if (type === "quiz") {
+            renderQuiz(raw);
+        } else {
+            resultBox.innerHTML = `
+            <div class="markdown-content animate-fade-in">
+                ${marked.parse(raw)}
+            </div>`;
+        }
+
+    } catch (err) {
+        resultBox.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-red-400">
+            <i data-lucide="alert-triangle" class="w-12 h-12 mb-4"></i>
+            <p class="font-bold">Request Failed. Please try again.</p>
+        </div>`;
+        lucide.createIcons();
+    }
+        }
+
+        // --- UTILS ---
+        function updateFileName() {
+            const input = document.getElementById('bookFile');
+            if (input.files[0]) {
+                const name = input.files[0].name;
+                document.getElementById('fileNameDisplay').innerText = name.length > 25 ? name.substring(0, 22) + '...' : name;
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById("toast");
+            t.innerHTML = msg; 
+            t.classList.replace("opacity-0", "opacity-100");
+            t.classList.replace("-translate-y-2", "translate-y-0"); 
+            setTimeout(() => {
+                t.classList.replace("opacity-100", "opacity-0");
+                t.classList.replace("translate-y-0", "-translate-y-2");
+            }, 3500);
+        }
+
+        function hideLoader() {
+    const loader = document.getElementById("loadingScreen");
+
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+
+    setTimeout(() => {
+        loader.style.display = "none";
+    }, 500);
+        }
+
+        function renderQuiz(quizText) {
+    const resultBox = document.getElementById("result");
+
+    const questions = quizText.split("## Question").slice(1);
+
+    let correctAnswers = [];
+    let rationales = [];
+
+    let html = "";
+
+    questions.forEach((q, i) => {
+        html += `<div class="mb-6 p-4 rounded-xl bg-slate-900 text-white">`;
+        html += `<p class="font-bold mb-2">Question ${i + 1}</p>`;
+
+        const lines = q.split("\n");
+
+        lines.forEach(line => {
+
+            // 🔥 Extract correct answers
+if (line.includes("Correct Answer")) {
+    const ans = line
+    .split(":")[1]
+    ?.replace(/[^A-D]/g, "")
+    .trim();
+    if (ans) correctAnswers.push(ans);
+}
+
+// 🔥 Extract explanations
+if (line.includes("Academic Rationale")) {
+    const exp = line.split(":")[1]?.trim();
+    if (exp) rationales.push(exp);
+}
+            if (
+                line.startsWith("A)") ||
+                line.startsWith("B)") ||
+                line.startsWith("C)") ||
+                line.startsWith("D)")
+            ) {
+                const option = line.charAt(0);
+
+                html += `
+                <label class="block cursor-pointer mb-1">
+                    <input type="radio" name="q${i}" value="${option}" class="mr-2">
+                    ${line}
+                </label>
+                `;
+            } else if (
+                !line.includes("Correct Answer") &&
+                !line.includes("Academic Rationale")
+            ) {
+                html += `<p class="text-sm mb-1">${line}</p>`;
+            }
+        });
+
+        html += `</div>`;
+    });
+
+    html += `
+    <button 
+    onclick="submitQuiz()" 
+    class="w-full mt-8 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-3 group"
+>
+    <i data-lucide="check-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+    <span class="tracking-wide">Submit Assessment</span>
+</button>
+
+    `;
+
+      window.correctAnswers = correctAnswers;
+window.rationales = rationales;
+
+    resultBox.innerHTML = html;
+      lucide.createIcons();
+        }
+        
+       function submitQuiz() {
+    let score = 0;
+    const total = window.correctAnswers.length;
+
+    let resultHTML = "";
+
+    for (let i = 0; i < total; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const userAnswer = selected ? selected.value : null;
+        const correct = window.correctAnswers[i];
+
+        if (userAnswer === correct) {
+            score++;
+            resultHTML += `<p class="text-green-400">Q${i + 1}: Correct ✅</p>`;
+        } else {
+            resultHTML += `
+            <div class="text-red-400 mb-3">
+                Q${i + 1}: Wrong ❌ <br>
+                <span class="text-slate-300">Correct Answer: ${correct}</span><br>
+                <span class="text-slate-400 text-sm">${window.rationales[i] || ""}</span>
+            </div>`;
+        }
+    }
+
+    document.getElementById("result").innerHTML = `
+    <div class="p-6 bg-slate-900 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 text-white">
+            Score: ${score}/${total}
+        </h2>
+        ${resultHTML}
+    </div>
+    `;
+       }
+
+        function togglePassword(id, btn) {
+    const input = document.getElementById(id);
+    const icon = btn.querySelector("i");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.setAttribute("data-lucide", "eye-off");
+    } else {
+        input.type = "password";
+        icon.setAttribute("data-lucide", "eye");
+    }
+
+    lucide.createIcons();
+        }
+
+        async function sendOTP() {
+    const email = document.getElementById("emailInput").value;
+
+    const res = await fetch("/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    alert(data.success ? "OTP sent 📩" : "Failed ❌");
+}
+
+async function verifyOTP() {
+    const email = document.getElementById("emailInput").value;
+    const otp = document.getElementById("otpInput").value;
+
+    const res = await fetch("/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp })
+    });
+
+    const data = await res.json();
+    alert(data.success ? "Verified ✅" : "Invalid OTP ❌");
+}
+        
+
+        // ✅ TEST EMAIL FUNCTION
+async function testEmail() {
+    try {
+        const res = await fetch(`${api}/test-email`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: "obilordelight@gmail.com"
+            })
+        });
+
+        const data = await res.json();
+        showToast("📩 " + JSON.stringify(data));
+
+    } catch (err) {
+        showToast("❌ " + err.message);
+    }
+}
+
+    async function forgotPassword() {
+    const email = document.getElementById("email").value;
+
+    if (!email) {
+        showToast("⚠️ Enter your email first");
+        return;
+    }
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset.html"
+    });
+
+    if (error) {
+        showToast("❌ " + error.message);
+        return;
+    }
+
+    showToast("📩 Reset link sent to your email");
+    }
+
+        // Initialize
+        (async () => {
+    await handleEmailRedirect();
+
+    const params = new URLSearchParams(window.location.search);
+       /* const email = params.get("email");
+if (email) {
+    const input = document.getElementById("email");
+    if (input) input.value = email;
+}*/ 
+       const email = params.get("email");
+if (email) {
+    const input = document.getElementById("email");
+    const pass = document.getElementById("password");
+
+    if (input) input.value = email;
+    if (pass) pass.focus();
+}
+            
+        if (params.get("reset") === "success") {
+    showToast("✅ Password reset successful, please login");
+    }
+
+    // ✅ SHOW MESSAGE FIRST
+    if (params.get("verified")) {
+        showToast("✅ Email verified! Please login");
+    }
+
+    // THEN run auth check
+    setTimeout(checkUser, 800);
+})();
+    </script>
+</body>
+</html>
