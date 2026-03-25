@@ -293,10 +293,10 @@
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 transition-all duration-300 z-[100] font-bold text-sm pointer-events-none border border-slate-600 flex items-center gap-2"></div>
 
     <script>
-        const api = process.env.NEXT_PUBLIC_API_URL;
+        const api = "https://study-ai-test-api.onrender.com";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = "https://bqvyalfglbchjdqhxifn.supabase.co";
+const supabaseKey = "sb_publishable_T5QHLko_MhQZwkFKIRFjKg_vMcUiqB1";
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
         supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session?.user) {
