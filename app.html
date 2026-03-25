@@ -139,14 +139,20 @@
             Security Verification
         </label>
     </div>
-
-    <div 
-        class="cf-turnstile" 
-        data-sitekey="0x4AAAAAACuLeZ39cRRtBKwI" 
-        data-theme="dark"
-        data-appearance="always"
-        data-compact="false">
+<script>
+if (!IS_TEST) {
+  document.write(`
+    <div
+      class="cf-turnstile"
+      data-sitekey="Dx4AAAAAACuLeZ39CRRtBkW"
+      data-theme="dark"
+      data-appearance="always"
+      data-compact="false">
     </div>
+  `);
+}
+</script>
+    
 </div>
 
                 <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">Sign In</button>
@@ -423,9 +429,11 @@ if (lastAttempt && now - lastAttempt < 3000) {
             
         const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
-    if (!token) {
+if (!IS_TEST) {
+  if (!token) {
     return showToast("⚠️ Please verify you're human", true);
-    }
+  }
+}
     localStorage.setItem(key, now);
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -435,8 +443,8 @@ if (lastAttempt && now - lastAttempt < 3000) {
     if (error) {
         showToast(`⚠️ ${error.message}`);
 
-        if (window.turnstile) {
-    turnstile.reset();
+        if (!IS_TEST && window.turnstile) {
+  turnstile.reset();
         }
         return;
     }
@@ -445,8 +453,8 @@ if (lastAttempt && now - lastAttempt < 3000) {
     if (!data.user.email_confirmed_at) {
     showToast("📩 Verify your email first");
 
-        if (window.turnstile) {
-    turnstile.reset();
+        if (!IS_TEST && window.turnstile) {
+  turnstile.reset();
         }
 
     // ✅ ADD THIS
