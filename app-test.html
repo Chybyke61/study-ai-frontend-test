@@ -65,7 +65,15 @@
         
     </style>
 
-   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+   <script>
+if (!IS_TEST) {
+  const script = document.createElement("script");
+  script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
+}
+   </script>
 </head>
 <body class="min-h-screen">
 
